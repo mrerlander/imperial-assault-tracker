@@ -8,7 +8,8 @@ class Home extends Component {
     constructor() {
         super();
         this.state = {
-            signUp: false
+            signUp: false,
+            user: null
         }
     };
 
@@ -38,9 +39,7 @@ class Home extends Component {
         })
             .then(res => res.json())
             .then(res => {
-                console.log(res);
-                // document.getElementById("ContactUsForm").reset();
-                // return this.setState({email: [...res]})
+                this.setState({user: res[0].name});
             });
 
 
@@ -49,7 +48,7 @@ class Home extends Component {
     render() {
         return (
             <div>
-        <Header handleClick={this.handleClick}/>
+        <Header user={this.state.user} handleClick={this.handleClick}/>
         <Grid>
         {(this.state.signUp) ? <SignUpForm handleSubmit={this.handleSubmit}/> : 
         <Welcome handleSignUpClick={this.handleSignUpClick}/>}

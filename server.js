@@ -59,7 +59,11 @@ app.post('/signup', function (req, res) {
             var query = "INSERT INTO users (name, email, password_hash ) VALUES (?, ?, ? )";
 
             connection.query(query, [username, email, hash], function (err, response) {
-                console.log(response)
+                
+                var userQuery = "Select name FROM users WHERE email = ?";
+                connection.query(userQuery, [email], function (err, user) {
+                    res.json(user);
+                });
             });
         });
     });
