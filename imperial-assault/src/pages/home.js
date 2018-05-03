@@ -24,10 +24,25 @@ class Home extends Component {
         event.preventDefault();
         
         const email = event.target.firstElementChild.children[1].value;
-        const username = event.target.firstElementChild.children[1].value;
-        const password = event.target.firstElementChild.children[1].value;
+        const username = event.target.firstElementChild.children[3].value;
+        const password = event.target.firstElementChild.children[5].value;
         
         //server side user creation
+        fetch("/signup", {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ username: username, email: email, password: password })
+        })
+            .then(res => res.json())
+            .then(res => {
+                console.log(res);
+                // document.getElementById("ContactUsForm").reset();
+                // return this.setState({email: [...res]})
+            });
+
 
     }
 

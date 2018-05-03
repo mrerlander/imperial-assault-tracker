@@ -3,6 +3,7 @@ var mysql = require("mysql");
 var logger = require("morgan");
 var bodyParser = require('body-parser');
 var path = require('path');
+var bcrypt = require('bcryptjs');
 
 var PORT = process.env.PORT || 3001;
 var app = express();
@@ -46,17 +47,32 @@ app.use(function (req, res, next) {
     next();
 });
 
+app.post('/signup', function (req, res) {
+    console.log(req.body);
 
+    var username = req.body.username;
+    var email = req.body.email;
+    var password = req.body.password;
+
+    bcrypt.genSalt(10, function (err, salt) {
+        bcrypt.hash(password, salt, function (err, hash) {
+            var query = "INSERT INTO users (name, email, password_hash ) VALUES (?, ?, ? )";
+
+            connection.query(query, [username, email, hash], function (err, response) {
+                console.log(response)
+            });
+        });
+    });
+});
 
 
 
 
 app.get('*', function (req, res) {
     res.sendFile(path.join(__dirname, './imperial-assault/public/index.html'));
-  });
-  
-  // Listen on port 3001
-    app.listen(PORT, function() {
-      console.log('🌎 ==> Now listening on PORT %s! Visit http://localhost:%s in your browser!', PORT, PORT);
-    });
-  
+});
+
+// Listen on port 3001
+app.listen(PORT, function () {
+    console.log('🌎 ==> Now listening on PORT %s! Visit http://localhost:%s in your browser!', PORT, PORT);
+});
